@@ -19,7 +19,7 @@ function EventsNavigation() {
   }
 
   return (
-    <ul>
+    <ul className="n-bar"> 
       <li className="company-name">
         <img className="image-svg" src={logo} />
         <span>CulinaryHub14</span>
@@ -35,7 +35,7 @@ function EventsNavigation() {
         </NavLink>
       </li>
       <li>
-        <Button onClick={handleShowCart} textOnly>
+        <Button onClick={handleShowCart} className="margin-t-b" textOnly>
           Cart ({totalCartItems})
         </Button>
       </li>
