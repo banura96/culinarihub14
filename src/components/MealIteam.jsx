@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import './MealIteam.css';
-import pizza from '../assets/meal-images/beef-tacos.jpg'
 import {Button} from '../components/UIs/Button'
 import CartContext from '../store/CartContext';
 export default function MealIteam({meal}) {
@@ -13,7 +12,7 @@ export default function MealIteam({meal}) {
     return (
         <li className='meal-item'>
             <article>
-                <img src={meal.imageBase64String}/>
+                <img src={meal.imageBase64String} alt={meal.productName}/>
             <div>
                 <h3>{meal.productName}</h3>
                 <p className='meal-item-price'>LKR {meal.sellingPrice}</p>

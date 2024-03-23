@@ -21,17 +21,17 @@ function EventsNavigation() {
   return (
     <ul className="n-bar"> 
       <li className="company-name">
-        <img className="image-svg" src={logo} />
+        <img className="image-svg" src={logo} alt="" />
         <span>CulinaryHub14</span>
       </li>
       <li>
         <NavLink to="/" className="nav__link" end>
-          Home
+          Menu
         </NavLink>
       </li>
       <li>
         <NavLink to="/events/new" className="nav__link">
-          Menu
+          Admin Dashboard
         </NavLink>
       </li>
       <li>

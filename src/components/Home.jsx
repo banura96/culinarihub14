@@ -6,6 +6,7 @@ import {Cart} from '../components/Cart';
 import Checkout from "./UIs/Checkout";
 
 export default function Home() {
+  console.log('Home');
   return (
     <UserProgressContextProvider>
       <CartContextProvider>
