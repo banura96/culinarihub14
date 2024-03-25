@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { getAuthToken } from "../utils/auth";
 
 
 async function sendHttpRequest(url, config) {
@@ -23,10 +24,13 @@ export default function useHttp(url, config, initialData) {
 
   const sendRequest = useCallback(
     async function sendRequest(data) {
+      const configToken = {...config};
+      if(configToken.headers.Authorization) {
+        configToken.headers.Authorization = 'Bearer ' + getAuthToken();
+      }
       setIsLoading(true);
       try {
-        const resData = await sendHttpRequest(url, {...config, body: data});
-        console.log(resData)
+        const resData = await sendHttpRequest(url, {...configToken, body: data});
         setData(resData)
         // setIsLoading(false);
       } catch (e) {

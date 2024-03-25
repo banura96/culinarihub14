@@ -48,6 +48,11 @@
   .margin-t-b {
     margin-top: 13px
   }
+
+  .log-out {
+    float: right;
+    margin: 12px;
+  }
 }
 
 

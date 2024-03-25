@@ -41,13 +41,13 @@ export function Cart() {
           ></CartItem>
         ))}
       </ul>
-      <p className="cart-total">{cartTotal}</p>
+      <p className="cart-total">LKR {cartTotal}</p>
       <p className="modal-actions">
         <Button textOnly onClick={handleCloseCart}>
           Close
         </Button>
         {cartCtx.items.length > 0 && (
-          <Button onClick={handleCheckout}>Goto Checkout</Button>
+          <Button onClick={handleCheckout} disabled={cartTotal <= 0 ? true : false}>Goto Checkout</Button>
         )}
       </p>
     </Modal>

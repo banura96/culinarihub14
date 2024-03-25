@@ -16,7 +16,7 @@ const requestConfig = {
   },
 };
 
-export default function Checkout() {
+export default function Checkout({customer}) {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
 
@@ -27,7 +27,7 @@ export default function Checkout() {
     sendRequest,
     clearData
   } = useHttp(
-    "http://54.179.42.252:8080/api/v1/order/checkout/1",
+    `http://54.179.42.252:8080/api/v1/order/checkout/${customer?.id}`,
     requestConfig
   );
 
@@ -47,13 +47,10 @@ export default function Checkout() {
   }
 
   function handleSubmit(event) {
-    console.log(event);
     event.preventDefault();
     const formData = new FormData(event.target);
-    console.log(formData);
     const customerData = Object.fromEntries(formData.entries());
     sendRequest(JSON.stringify(customerData));
-    console.log(customerData);
   }
 
   let actions = (
@@ -82,7 +79,7 @@ export default function Checkout() {
           few minutes.
         </p>
         <p className="modal-actions">
-          <Button onClick={handleFinish}>Okey</Button>
+          <Button onClick={handleFinish} type="button">Okey</Button>
         </p>
       </Modal>
     );

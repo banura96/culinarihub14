@@ -10,7 +10,7 @@ export async function userLogin(data) {
 }
 
 export async function userRegister(data) {
-  let response = await fetch(`http://54.179.42.252:8080/api/v1/register`, {
+  let response = await fetch(`http://54.179.42.252:8080/api/v1/register-customer`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
