@@ -35,6 +35,11 @@ function EventsNavigation({hidden = false, userRoles = []}) {
           Menu
         </NavLink>
       </li>
+      <li>
+        <NavLink to="/orders" className="nav__link" end>
+          My Orders
+        </NavLink>
+      </li>
       <li hidden={!userRoles.find((role) => role ==='ADMIN')}>
         <NavLink to="/dashboard" className="nav__link">
           Admin Dashboard

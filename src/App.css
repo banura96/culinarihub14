@@ -214,3 +214,14 @@ input:focus-visible {
 .text-center{
   text-align: center;
 }
+
+.delivered-btn {
+  background-color: #22b504 !important;
+  border: 1px solid #048506 !important;
+}
+
+.delivered-btn button:hover {
+  background-color: #1cc70e !important;
+  border: 1px solid #048506 !important;
+
+}

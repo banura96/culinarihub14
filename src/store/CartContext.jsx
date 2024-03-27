@@ -77,6 +77,7 @@ function cartReducer(state, action) {
   }
 
   if(action.type === "SET_INITIAL_CART") {
+    console.log(action)
     return {...state, items: action.items}
   }
 

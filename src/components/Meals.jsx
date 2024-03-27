@@ -44,7 +44,7 @@ export default function Meals({customer}) {
           resCartData.forEach((item) => {
             let findItem = loadedMeals.find((meal) => meal.id === item.productId);
             if(findItem) {
-            cartA.push({...findItem, quantity: item.quantity});
+            cartA.push({...findItem, quantity: item.quantity, cartId: item.id});
             }
           });
           cartCtx.setInitialCart(cartA); 

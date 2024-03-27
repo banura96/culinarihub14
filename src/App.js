@@ -10,6 +10,8 @@ import Registration from "./components/Registration";
 import Root from "./components/Root";
 import { checkOutLoader as authloader } from "./utils/auth";
 import AdminDashboard from "./components/Admin-Dashboard";
+import Orders, {loadingLogedInUserData as authAndUserLoader} from "./components/Orders";
+import { getAuthToken } from "./utils/auth";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       { index:true, path: "/", element: <Home />, loader: authloader},
       { path: "/dashboard", element: <AdminDashboard />, loader: authloader},
-    ],
+      {path: "/orders", element: <Orders/>, loader: authAndUserLoader}],
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Registration /> }

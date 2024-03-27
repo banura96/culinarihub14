@@ -6,14 +6,7 @@ import { UserProgressContextProvider } from "../store/UserProgressContext";
 function Root() {
   return (
     <>
-    
-      {/* <EventsNavigation /> */}
-     
-      {/* <UserProgressContextProvider>
-        <CartContextProvider> */}
           <Outlet />
-        {/* </CartContextProvider>
-      </UserProgressContextProvider> */}
     </>
   );
 }

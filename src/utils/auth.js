@@ -10,9 +10,14 @@ export function tokenLoader() {
 }
 
 export function checkOutLoader() {
+  console.log('loader')
   const token = getAuthToken();
+  console.log('loader toke', token)
+
 
   if (!token) {
+    console.log('loader toke redirect', token)
+
     return redirect("/login");
   }
   return null;

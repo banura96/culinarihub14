@@ -13,6 +13,8 @@ export function Cart() {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
 
+  console.log(cartCtx)
+
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.sellingPrice,
     0
@@ -33,6 +35,7 @@ export function Cart() {
         {cartCtx.items.map((item) => (
           <CartItem
             key={item.id}
+            cartId = {item.cartId}
             name={item.productName}
             price={item.sellingPrice}
             quenty={item.quantity}
