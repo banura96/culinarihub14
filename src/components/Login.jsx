@@ -6,6 +6,7 @@ import Input from "./UIs/Input.jsx";
 
 export default function Login() {
   // const [enteredEmail, setEmail] = useState();
+  const [proccessing, setProccessing] = useState();
   const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -19,6 +20,7 @@ export default function Login() {
       password: loginForm.password,
     };
     try {
+      setProccessing(true);
       let response = await userLogin(data);
       const resTokenData = await response.json();
       if (!response.ok) {
@@ -34,6 +36,7 @@ export default function Login() {
       // console.log(response);
     } catch (e) {}
     // console.log("submitted", loginForm);
+    setProccessing(false);
   }
 
   function handleForm(input, event) {
@@ -81,7 +84,7 @@ export default function Login() {
               />
             </div> */}
             <button className="btn mt-2" type="submit">
-              Submit
+              { proccessing && <i className="fa fa-spinner fa-spin"></i>} Submit
             </button>
           </form>
           <p className="mt-2">

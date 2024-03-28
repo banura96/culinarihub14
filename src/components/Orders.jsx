@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, redirect } from "react-router-dom";
 import EventsNavigation from "./EventsNavigation";
 import { useState } from "react";
 import { getAuthToken, checkOutLoader } from "../utils/auth";
@@ -11,42 +11,10 @@ export default function () {
   const [activeTab, setActiveTab] = useState('order');
 
   const data = useLoaderData();
-  console.log(data);
 
   function changeTab(tab) {
     setActiveTab(tab);
   }
-  // useEffect(() => {
-  //   async function getCustomerData() {
-  //     const customerData = await fetch(
-  //       "http://54.179.42.252:8080/api/v1/customer/me",
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "Bearer " + getAuthToken(),
-  //         },
-  //       }
-  //     );
-  //     const resCustomerData = await customerData.json();
-  //     if (customerData.ok) {
-  //       setCustomer(resCustomerData);
-  //     }
-  //     const userData = await fetch(
-  //       `http://54.179.42.252:8080/api/v1/user/${resCustomerData.id}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: "Bearer " + getAuthToken(),
-  //         },
-  //       }
-  //     );
-  //     const resUserData = await userData.json();
-  //     if (userData.ok) {
-  //       setUserRole([...resUserData.userRole]);
-  //     }
-  //   }
-  //   getCustomerData();
-  // }, []);
 
   return (
     <>
@@ -73,7 +41,6 @@ export default function () {
 }
 
 export async function loadingLogedInUserData() {
-    checkOutLoader();
     const customerData = await fetch(
         "http://54.179.42.252:8080/api/v1/customer/me",
         {
@@ -84,32 +51,23 @@ export async function loadingLogedInUserData() {
         }
       );
       const resCustomerData = await customerData.json();
-      console.log('works')
-        console.log(customerData)
       if (!customerData.ok) {
         if(resCustomerData.message === 'Unauthorized') {
-          console.log('works')
           localStorage.clear();
-          console.log('works')
-          try {
-            checkOutLoader();
-
-          } catch(e) {
-            console.log(e)
-          }
+          return redirect("/login");
         }
         throw new Error(customerData.message || "Something went wrong");
       }
-      const userData = await fetch(
-        `http://54.179.42.252:8080/api/v1/user/${resCustomerData.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + getAuthToken(),
-          },
-        }
-      );
-      const resUserData = await userData.json();
+      // const userData = await fetch(
+      //   `http://54.179.42.252:8080/api/v1/user/${resCustomerData.id}`,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: "Bearer " + getAuthToken(),
+      //     },
+      //   }
+      // );
+      // const resUserData = await userData.json();
 
-      return {...resCustomerData, ...resUserData}
+      return {...resCustomerData}
 }

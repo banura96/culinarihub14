@@ -24,9 +24,7 @@ export default function useHttp(url, config, initialData) {
 
   const sendRequest = useCallback(
     async function sendRequest(data) {
-      console.log(config)
       const configToken = {...config};
-      console.log(configToken)
 
       if(configToken.headers.Authorization) {
         configToken.headers.Authorization = 'Bearer ' + getAuthToken();

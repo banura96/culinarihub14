@@ -34,12 +34,6 @@ function cartReducer(state, action) {
         ...existingItem,
         quantity: existingItem.quantity + 1,
       };
-      saveCartInDB({
-        customerId: action.customerId,
-        productId: updatedItem.id,
-        quantity: updatedItem.quantity,
-        price: updatedItem.sellingPrice,
-      });
       updatedItems[exsitingCartItemIndex] = updatedItem;
     } else {
       saveCartInDB({

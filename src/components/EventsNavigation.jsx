@@ -37,14 +37,16 @@ function EventsNavigation({hidden = false, userRoles = []}) {
       </li>
       <li>
         <NavLink to="/orders" className="nav__link" end>
-          My Orders
+
+        {(!userRoles.find((role) => role ==='ADMIN') &&  'My Orders') || 'Admin Dashboard'}
+         
         </NavLink>
       </li>
-      <li hidden={!userRoles.find((role) => role ==='ADMIN')}>
+      {/* <li hidden={!userRoles.find((role) => role ==='ADMIN')}>
         <NavLink to="/dashboard" className="nav__link">
           Admin Dashboard
         </NavLink>
-      </li>
+      </li> */}
       <li hidden={hidden}>
         <Button onClick={handleShowCart} className="margin-t-b" textOnly>
           Cart ({totalCartItems})

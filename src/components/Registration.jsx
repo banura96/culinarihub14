@@ -1,14 +1,15 @@
 import "./Registration.css";
+import { useState } from "react";
 import {
-  userRegister,
-  userLogin,
-  userRegisterAsCustomer,
+  userRegister
 } from "../httpServices/userService";
 import { useNavigate } from "react-router-dom";
 import Input from "./UIs/Input";
 
 export default function Registration() {
   const navigate = useNavigate();
+  const [proccessing, setProccessing] = useState();
+
 
   async function formSubmitted(event) {
     event.preventDefault();
@@ -19,6 +20,7 @@ export default function Registration() {
       let tempRegData = { ...regFormData };
       delete tempRegData.password;
       delete tempRegData.confirmpassword;
+      setProccessing(true);
       let response = await userRegister({
         user: {
           username: regFormData.email,
@@ -31,33 +33,11 @@ export default function Registration() {
       if (!response.ok) {
         throw new Error(resData.message || "Something went wrong");
       }
-
-      // let tokenResponse = await userLogin({
-      //   username: regFormData.email,
-      //   password: regFormData.password,
-      // });
-      // const resTokenData = await tokenResponse.json();
-      // if (!tokenResponse.ok) {
-      //   throw new Error(resTokenData.message || "Something went wrong");
-      // }
-
-      // let tempRegData = { ...regFormData };
-      // delete tempRegData.password;
-      // delete tempRegData.confirmpassword;
-
-      // let customerReg = await userRegisterAsCustomer(
-      //   tempRegData,
-      //   resTokenData.token
-      // );
-      // const resCustomerData = await customerReg.json();
-      // if (!customerReg.ok) {
-      //   throw new Error(resCustomerData.message || "Something went wrong");
-      // }
       return navigate(`/login`);
     } catch (e) {
       console.log(e);
     }
-    // console.log("submitted", loginForm);
+    setProccessing(false);
   }
 
   //   function handleForm(input, event) {
@@ -125,7 +105,7 @@ export default function Registration() {
           </div>
           <div>
             <button className="mt-2 btn" type="submit">
-              Register
+            { proccessing && <i className="fa fa-spinner fa-spin"></i>} Register
             </button>
           </div>
         </form>

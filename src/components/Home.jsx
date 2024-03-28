@@ -9,7 +9,7 @@ import { getAuthToken } from "../utils/auth";
 
 export default function Home() {
   const [customer, setCustomer] = useState(null);
-  const [userRole, setUserRole] = useState([]);
+  // const [userRole, setUserRole] = useState([]);
  
 
   useEffect(() => {
@@ -27,19 +27,19 @@ export default function Home() {
       if (customerData.ok) {
         setCustomer(resCustomerData);
       }
-      const userData = await fetch(
-        `http://54.179.42.252:8080/api/v1/user/${resCustomerData.id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + getAuthToken(),
-          },
-        }
-      );
-      const resUserData = await userData.json();
-      if (userData.ok) {
-        setUserRole([...resUserData.userRole]);
-      }
+      // const userData = await fetch(
+      //   `http://54.179.42.252:8080/api/v1/user/${resCustomerData.id}`,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: "Bearer " + getAuthToken(),
+      //     },
+      //   }
+      // );
+      // const resUserData = await userData.json();
+      // if (userData.ok) {
+      //   setUserRole([...resUserData.userRole]);
+      // }
     }
     getCustomerData();
   }, []);
@@ -48,13 +48,13 @@ export default function Home() {
     <>
       <UserProgressContextProvider>
         <CartContextProvider>
-          <EventsNavigation customer={customer} userRoles={userRole} />
+          <EventsNavigation customer={customer?.customer} userRoles={customer?.user.userRole} />
 
-          <Meals customer={customer} />
+          <Meals customer={customer?.customer} />
 
-          <Cart customer={customer} />
+          <Cart customer={customer?.customer} />
 
-          <Checkout customer={customer} />
+          <Checkout customer={customer?.customer} />
         </CartContextProvider>
       </UserProgressContextProvider>
     </>

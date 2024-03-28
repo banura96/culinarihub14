@@ -90,14 +90,14 @@ export default function Checkout({customer}) {
       <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount: LKR {cartTotal}</p>
-        <Input label="Full Name" type="text" id="full-name" />
-        <Input label="E-Mail Address" type="email" id="email" />
-        <Input label="Street" type="text" id="street" />
-
+        <Input label="Full Name" type="text" id="full-name" name='fullName' />
+        <Input label="E-Mail Address" type="email" id="email" name='email' />
+        <Input label="Address" type="text" id="address" name='address' />
+{/* 
         <div className="control-row">
           <Input label="Postal Code" type="text" id="postal-code" />
           <Input label="City" type="text" id="city" />
-        </div>
+        </div> */}
 
         {error && (
           <Error title="Faild to proceed order!" message={error}></Error>
