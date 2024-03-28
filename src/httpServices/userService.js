@@ -1,4 +1,3 @@
-import {getAuthToken} from '../utils/auth'
 export async function userLogin(data) {
   let response = await fetch(`http://54.179.42.252:8080/api/v1/authenticate`, {
     method: "POST",
@@ -7,17 +6,31 @@ export async function userLogin(data) {
     },
     body: JSON.stringify(data),
   });
-  return response.json();
+  return response;
 }
 
 export async function userRegister(data) {
-  let response = await fetch(`http://54.179.42.252:8080/api/v1/register`, {
+  let response = await fetch(`http://54.179.42.252:8080/api/v1/register-customer`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": 'Bearer ' + getAuthToken(),
     },
     body: JSON.stringify(data),
   });
-  return response.json();
+  // console.log(response)
+  return response;
+}
+
+export async function userRegisterAsCustomer(data, token) {
+  console.log(token)
+  let response = await fetch(`http://54.179.42.252:8080/api/v1/customer/save`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": 'Bearer ' + token,
+    },
+    body: JSON.stringify(data),
+  });
+  // console.log(response)
+  return response;
 }

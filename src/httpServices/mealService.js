@@ -8,3 +8,13 @@ export async function getAllMeals() {
   });
   return response.json();
 }
+
+export async function placeOrder() {
+  let response = await fetch(`http://54.179.42.252:8080/api/v1/product`, {
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": 'Bearer ' + getAuthToken(),
+  }
+});
+return response.json();
+}

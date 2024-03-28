@@ -1,6 +1,25 @@
-.registration-form {
-   width: 40%;
-   background: darkgray; 
-   margin: auto;
-   padding: 10px; 
+.reg-page {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(to bottom right, purple, #f7f727);
+  /* background-image: url("../assets/login-backgrond.jpg");
+   background-size: cover;
+   background-repeat: no-repeat; */
+  display: flex;
+  justify-content: center;
+  position: absolute;
+
+  /* .brand-name-position{ */
+   /* position: relative;
+   left: 50%; */
+  /* } */
+
+  .registration-form {
+    border: 1px solid grey;
+    border-radius: 8px;
+    padding: 15px;
+    background: transparent;
+    margin: auto;
+    padding: 10px;
+  }
 }
