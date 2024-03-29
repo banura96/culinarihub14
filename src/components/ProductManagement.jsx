@@ -96,7 +96,7 @@ export default function ProductManagement() {
 
   return (
     <>
-      <div>
+      <div className="p-3">
         <div>
           <ButtonCustom onClick={handleAddNewShow} className="float-end mt-2 mb-2">Add New</ButtonCustom>
           <Modalb

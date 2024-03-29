@@ -38,7 +38,7 @@ function EventsNavigation({hidden = false, userRoles = []}) {
       <li>
         <NavLink to="/orders" className="nav__link" end>
 
-        {(!userRoles.find((role) => role ==='ADMIN') &&  'My Orders') || 'Admin Dashboard'}
+        {(!userRoles.find((role) => role === 'ADMIN') &&  'My Orders') || 'Admin Dashboard'}
          
         </NavLink>
       </li>

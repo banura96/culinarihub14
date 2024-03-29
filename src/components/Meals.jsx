@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 // import { getAllMeals } from "../httpServices/mealService";
 import MealIteam from "./MealIteam";
 import useHttp from "../hooks/useHttp";
@@ -40,14 +40,19 @@ export default function Meals({customer}) {
         const resCartData = await cartResponse.json();
         // console.log(cartResponse)
         if(loadedMeals.length > 0 && resCartData.length > 0) { 
-          let cartA = [];
-          resCartData.forEach((item) => {
-            let findItem = loadedMeals.find((meal) => meal.id === item.productId);
-            if(findItem) {
-            cartA.push({...findItem, quantity: item.quantity, cartId: item.id});
-            }
-          });
-          cartCtx.setInitialCart(cartA); 
+          try {
+            let cartA = [];
+            resCartData.forEach((item) => {
+              let findItem = loadedMeals.find((meal) => meal.id === item.productId);
+              if(findItem) {
+              cartA.push({...findItem, quantity: item.quantity, cartId: item.id});
+              }
+            });
+            cartCtx.setInitialCart(cartA);
+          } catch(e) {
+            cartCtx.setInitialCart([]);
+          }
+         
         }
       }
   
@@ -100,7 +105,7 @@ export default function Meals({customer}) {
   return (
     <ul id="meals">
       {loadedMeals.map((item) => (
-        <MealIteam key={item.productName} meal={item} />
+        <MealIteam key={item.id} meal={item} customer={customer} />
       ))}
     </ul>
   );

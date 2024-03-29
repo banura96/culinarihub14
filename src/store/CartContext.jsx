@@ -8,20 +8,17 @@ const CartContext = createContext({
   clearCart: () => {},
 });
 
-async function saveCartInDB(data) {
-  await fetch(`http://54.179.42.252:8080/api/v1/cart/save`,
-    {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + getAuthToken(),
-      },
-      body: JSON.stringify(data),
-    }
-  );
-}
 
 function cartReducer(state, action) {
+
+  // async function addCartDate() {
+  //   await saveCartInDB({
+      // customerId: action.customerId,
+      // productId: action.item.id,
+      // quantity: 1,
+      // price: action.item.sellingPrice,
+  //   });
+  // }
   if (action.type === "ADD_ITEM") {
     const exsitingCartItemIndex = state.items.findIndex(
       (item) => item.id === action.item.id
@@ -36,12 +33,12 @@ function cartReducer(state, action) {
       };
       updatedItems[exsitingCartItemIndex] = updatedItem;
     } else {
-      saveCartInDB({
-        customerId: action.customerId,
-        productId: action.item.id,
-        quantity: 1,
-        price: action.item.sellingPrice,
-      });
+      // saveCartInDB({
+      //   customerId: action.customerId,
+      //   productId: action.item.id,
+      //   quantity: 1,
+      //   price: action.item.sellingPrice,
+      // });
       updatedItems.push({ ...action.item, quantity: 1 });
     }
     return { ...state, items: updatedItems };
@@ -71,8 +68,7 @@ function cartReducer(state, action) {
   }
 
   if(action.type === "SET_INITIAL_CART") {
-    console.log(action)
-    return {...state, items: action.items}
+    return {...state, items: action.items || []}
   }
 
   // Warning: Maximum update depth exceeded. 
@@ -86,7 +82,7 @@ function cartReducer(state, action) {
 export function CartContextProvider({ children }) {
   const [cart, dispathCartAction] = useReducer(cartReducer, { items: [] });
 
-  function addItem(item, customerId) {
+  async function addItem(item, customerId) {
     dispathCartAction({ type: "ADD_ITEM", item, customerId });
   }
 

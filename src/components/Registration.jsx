@@ -25,7 +25,7 @@ export default function Registration() {
         user: {
           username: regFormData.email,
           password: regFormData.password,
-          userRole: ["USER", "CUSTOMER", "ADMIN"],
+          userRole: ["USER", "CUSTOMER"],
         },
         customer: { ...tempRegData },
       });

@@ -24,6 +24,7 @@ export default function Home() {
         }
       );
       const resCustomerData = await customerData.json();
+
       if (customerData.ok) {
         setCustomer(resCustomerData);
       }

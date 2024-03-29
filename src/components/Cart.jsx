@@ -3,17 +3,14 @@ import CartContext from "../store/CartContext";
 import UserProgressContext from "../store/UserProgressContext";
 import { Button } from "../components/UIs/Button";
 import { Modal } from "../components/UIs/Modal";
-import { CartItem } from "./UIs/CartItem";
+import  CartItem  from "./UIs/CartItem.jsx";
+import { currencyFormater } from "../utils/numberFormatting";
 
 export function Cart() {
-  try {
-  } catch (e) {
-    console.log(e);
-  }
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
 
-  console.log(cartCtx)
+  // console.log(cartCtx)
 
   const cartTotal = cartCtx.items.reduce(
     (totalPrice, item) => totalPrice + item.quantity * item.sellingPrice,
@@ -44,7 +41,7 @@ export function Cart() {
           ></CartItem>
         ))}
       </ul>
-      <p className="cart-total">LKR {cartTotal}</p>
+      <p className="cart-total">LKR {currencyFormater.format(cartTotal)}</p>
       <p className="modal-actions">
         <Button textOnly onClick={handleCloseCart}>
           Close

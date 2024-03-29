@@ -6,6 +6,7 @@ import { default as Buttonb } from "react-bootstrap/Button";
 import { default as Modalb } from "react-bootstrap/Modal";
 import { getAuthToken } from "../utils/auth";
 import { useLoaderData, useLocation } from "react-router-dom";
+import { currencyFormater } from "../utils/numberFormatting";
 
 const requestConfig = {
   headers: {
@@ -14,9 +15,8 @@ const requestConfig = {
   },
 };
 
-export default function OrderManagement({ customer }) {
+export default function OrderManagement() {
   const loggedUser = useLoaderData();
-  console.log(loggedUser)
   const adminUser = loggedUser.user.userRole.find((role) => role === "ADMIN");
 
   const [show, setShow] = useState(false);
@@ -72,14 +72,16 @@ export default function OrderManagement({ customer }) {
 
   // console.log(data)
   return (
-    <div className="">
+    <div className="p-3">
       <div className="col-12">
         <table className="table table-bordered table-responsive-lg">
           <thead>
             <tr>
               <td>Order Date</td>
               <td>Delivery Address</td>
-              <td>Customer Code</td>
+              {adminUser &&  <td>Customer Code</td>}
+              {adminUser &&  <td>Customer Name</td>}
+
               <td>Order Status</td>
               <td>Total (LKR)</td>
               <td>Details</td>
@@ -93,9 +95,10 @@ export default function OrderManagement({ customer }) {
                   {format(item.orderPlacedDate, "yyyy MMMM do , h:mm:ss a")}
                 </td>
                 <td>{item.deliveryAddress || "N/A"}</td>
-                <td>{item.customerId}</td>
+                {adminUser && <td>{item.customerId}</td>}
+                {adminUser && <td>{item.customerName}</td>}
                 <td>{item.orderStatus}</td>
-                <td>{item.orderTotal}</td>
+                <td>{currencyFormater.format(item.orderTotal)}</td>
                 <td>
                   <Button textOnly onClick={() => handleShow(item.id)}>
                     Details
@@ -139,6 +142,7 @@ export default function OrderManagement({ customer }) {
                 )}
 
                 <Modalb
+                key={item.id}
                   show={show && item.id === selectedModal}
                   onHide={handleClose}
                 >
@@ -147,8 +151,8 @@ export default function OrderManagement({ customer }) {
                   </Modalb.Header>
                   <Modalb.Body>
                     <ul>
-                      {item.orderItems.map((food) => (
-                        <li key={item.id} className="cart-item">
+                      {item.orderItems.map((food, index) => (
+                        <li key={index} className="cart-item">
                           <p>
                             {food.product.productName} - {food.soldPrice} *{" "}
                             {food.quantity}

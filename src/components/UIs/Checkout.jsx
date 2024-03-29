@@ -79,7 +79,7 @@ export default function Checkout({customer}) {
           few minutes.
         </p>
         <p className="modal-actions">
-          <Button onClick={handleFinish} type="button">Okey</Button>
+          <Button onClick={handleFinish} type="button">Ok</Button>
         </p>
       </Modal>
     );
@@ -90,9 +90,9 @@ export default function Checkout({customer}) {
       <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
         <p>Total Amount: LKR {cartTotal}</p>
-        <Input label="Full Name" type="text" id="full-name" name='fullName' />
-        <Input label="E-Mail Address" type="email" id="email" name='email' />
-        <Input label="Address" type="text" id="address" name='address' />
+        <Input label="Full Name" type="text" id="full-name" defaultValue={customer?.fullName} name='fullName' />
+        <Input label="E-Mail Address" type="email" id="email" defaultValue={customer?.email} name='email' />
+        <Input label="Address" type="text" id="address" defaultValue={customer?.address} name='address' />
 {/* 
         <div className="control-row">
           <Input label="Postal Code" type="text" id="postal-code" />
