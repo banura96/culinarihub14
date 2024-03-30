@@ -1,11 +1,12 @@
 import useHttp from "../hooks/useHttp";
 import { Button } from "./UIs/Button";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { default as Buttonb } from "react-bootstrap/Button";
 import { default as Modalb } from "react-bootstrap/Modal";
 import { getAuthToken } from "../utils/auth";
 import { useLoaderData, useLocation } from "react-router-dom";
+import { currencyFormater } from "../utils/numberFormatting";
 
 const requestConfig = {
   headers: {
@@ -14,15 +15,32 @@ const requestConfig = {
   },
 };
 
-export default function OrderManagement({ customer }) {
+export default function OrderManagement() {
   const loggedUser = useLoaderData();
-  console.log(loggedUser)
   const adminUser = loggedUser.user.userRole.find((role) => role === "ADMIN");
 
   const [show, setShow] = useState(false);
   const [selectedModal, setSelectedModal] = useState(null);
   const [proccessing, setProccesseing] = useState(false);
   const [proccessingId, setProccessingId] = useState(null);
+  const [orderMaster, setOrderMaster] = useState([]);
+
+  const { data, isLoading } = useHttp(
+    `http://54.179.42.252:8080/api/v1/order/customer-orders?${
+      !adminUser ? "customerId=" + loggedUser.customer.id : ""
+    }&orderStatus=`,
+    requestConfig,
+    []
+  );
+
+  useEffect(() => {
+    // const fillter = data.filter((item) => {
+    //   if(item.orderStatus === String('Processing').toUpperCase()) {
+    //     return true
+    //   }
+    // });
+    setOrderMaster(data);
+  }, [data])
 
   async function changeOrderStatus(status, item, id) {
     setProccesseing(true);
@@ -54,32 +72,48 @@ export default function OrderManagement({ customer }) {
   };
   //    const loc = useLocation();
   //    console.log(loc)
-  const { data, isLoading, error, sendRequest } = useHttp(
-    `http://54.179.42.252:8080/api/v1/order/customer-orders?${
-      !adminUser ? "customerId=" + loggedUser.customer.id : ""
-    }&orderStatus=`,
-    requestConfig,
-    []
-  );
+
+  function handleFilter(event) {
+    const status = event.target.value;
+    const fillteredData = data.filter((item) => {
+      if(status === 'All') {
+        return true
+      }
+      if(item.orderStatus === String(status).toUpperCase()) {
+        return true
+      }
+      
+    });
+    setOrderMaster(fillteredData);
+    console.log(event.target.value)
+  }
 
   if (isLoading) {
     return (
-      <div>
-        <p>Fetching order details...</p>
-      </div>
+      <div className="dotted-loader"></div>
     );
   }
 
+
+
   // console.log(data)
   return (
-    <div className="">
+    <div className="p-3">
       <div className="col-12">
+        <select className="select-c" onChange={handleFilter}>
+          <option>All</option>
+          <option>Placed</option>
+          <option>Processing</option>
+          <option>Delivered</option>
+        </select>
         <table className="table table-bordered table-responsive-lg">
           <thead>
             <tr>
               <td>Order Date</td>
               <td>Delivery Address</td>
-              <td>Customer Code</td>
+              {adminUser &&  <td>Customer Code</td>}
+              {adminUser &&  <td>Customer Name</td>}
+
               <td>Order Status</td>
               <td>Total (LKR)</td>
               <td>Details</td>
@@ -87,15 +121,16 @@ export default function OrderManagement({ customer }) {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {orderMaster.map((item) => (
               <tr key={item.id}>
                 <td>
                   {format(item.orderPlacedDate, "yyyy MMMM do , h:mm:ss a")}
                 </td>
                 <td>{item.deliveryAddress || "N/A"}</td>
-                <td>{item.customerId}</td>
+                {adminUser && <td>{item.customerId}</td>}
+                {adminUser && <td>{item.customerName}</td>}
                 <td>{item.orderStatus}</td>
-                <td>{item.orderTotal}</td>
+                <td>{currencyFormater.format(item.orderTotal)}</td>
                 <td>
                   <Button textOnly onClick={() => handleShow(item.id)}>
                     Details
@@ -139,6 +174,7 @@ export default function OrderManagement({ customer }) {
                 )}
 
                 <Modalb
+                key={item.id}
                   show={show && item.id === selectedModal}
                   onHide={handleClose}
                 >
@@ -147,8 +183,8 @@ export default function OrderManagement({ customer }) {
                   </Modalb.Header>
                   <Modalb.Body>
                     <ul>
-                      {item.orderItems.map((food) => (
-                        <li key={item.id} className="cart-item">
+                      {item.orderItems.map((food, index) => (
+                        <li key={index} className="cart-item">
                           <p>
                             {food.product.productName} - {food.soldPrice} *{" "}
                             {food.quantity}

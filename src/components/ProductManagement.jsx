@@ -54,7 +54,7 @@ export default function ProductManagement() {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
-      cb(reader.result);
+      (file.size > 0  && cb(reader.result)) || cb(null);
     };
     reader.onerror = function (error) {
       console.log("Error: ", error);
@@ -65,6 +65,7 @@ export default function ProductManagement() {
     event.preventDefault();
     const formData = new FormData(event.target);
     const regFormData = Object.fromEntries(formData.entries());
+
     let submitionForm = { ...regFormData };
     await getBase64(submitionForm.imageBase64String, async (result) => {
       console.log(result);
@@ -88,15 +89,13 @@ export default function ProductManagement() {
 
   if (isLoading) {
     return (
-      <div>
-        <p>Fetching product details...</p>
-      </div>
+      <div className="dotted-loader"></div>
     );
   }
 
   return (
     <>
-      <div>
+      <div className="p-3">
         <div>
           <ButtonCustom onClick={handleAddNewShow} className="float-end mt-2 mb-2">Add New</ButtonCustom>
           <Modalb
@@ -115,6 +114,7 @@ export default function ProductManagement() {
                       <div className="row">
                         <div className="col-6">
                           <Input
+                            defaultValue={null}
                             type="file"
                             name="imageBase64String"
                             accept="image/png, image/gif, image/jpeg"
@@ -123,7 +123,7 @@ export default function ProductManagement() {
                         </div>
                         {file && (
                           <div className="col-6">
-                            <img width="100px" src={file} />
+                            <img width="100px" src={file} alt="" />
                           </div>
                         )}
                       </div>
@@ -220,7 +220,7 @@ export default function ProductManagement() {
                   </Modalb.Header>
                   <form onSubmit={handleStockUpdate}>
                     <Modalb.Body>
-                      <Input hiddenElement={true} value={item.id} name="id" />
+                      <Input hiddenElement={true} defaultValue={item.id} name="id" />
 
                       <label>Update Image(Optional)</label>
                       <div className="row">
@@ -228,6 +228,7 @@ export default function ProductManagement() {
                           <Input
                             required={false}
                             type="file"
+                            defaultValue={null}
                             name="imageBase64String"
                             accept="image/png, image/gif, image/jpeg"
                             onChange={handleChange}
@@ -235,7 +236,7 @@ export default function ProductManagement() {
                         </div>
                         {file && (
                           <div className="col-6">
-                            <img width="100px" src={file} />
+                            <img width="100px" src={file} alt="" />
                           </div>
                         )}
                       </div>
