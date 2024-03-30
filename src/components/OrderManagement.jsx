@@ -1,7 +1,7 @@
 import useHttp from "../hooks/useHttp";
 import { Button } from "./UIs/Button";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { default as Buttonb } from "react-bootstrap/Button";
 import { default as Modalb } from "react-bootstrap/Modal";
 import { getAuthToken } from "../utils/auth";
@@ -23,6 +23,24 @@ export default function OrderManagement() {
   const [selectedModal, setSelectedModal] = useState(null);
   const [proccessing, setProccesseing] = useState(false);
   const [proccessingId, setProccessingId] = useState(null);
+  const [orderMaster, setOrderMaster] = useState([]);
+
+  const { data, isLoading } = useHttp(
+    `http://54.179.42.252:8080/api/v1/order/customer-orders?${
+      !adminUser ? "customerId=" + loggedUser.customer.id : ""
+    }&orderStatus=`,
+    requestConfig,
+    []
+  );
+
+  useEffect(() => {
+    // const fillter = data.filter((item) => {
+    //   if(item.orderStatus === String('Processing').toUpperCase()) {
+    //     return true
+    //   }
+    // });
+    setOrderMaster(data);
+  }, [data])
 
   async function changeOrderStatus(status, item, id) {
     setProccesseing(true);
@@ -54,26 +72,40 @@ export default function OrderManagement() {
   };
   //    const loc = useLocation();
   //    console.log(loc)
-  const { data, isLoading, error, sendRequest } = useHttp(
-    `http://54.179.42.252:8080/api/v1/order/customer-orders?${
-      !adminUser ? "customerId=" + loggedUser.customer.id : ""
-    }&orderStatus=`,
-    requestConfig,
-    []
-  );
+
+  function handleFilter(event) {
+    const status = event.target.value;
+    const fillteredData = data.filter((item) => {
+      if(status === 'All') {
+        return true
+      }
+      if(item.orderStatus === String(status).toUpperCase()) {
+        return true
+      }
+      
+    });
+    setOrderMaster(fillteredData);
+    console.log(event.target.value)
+  }
 
   if (isLoading) {
     return (
-      <div>
-        <p>Fetching order details...</p>
-      </div>
+      <div className="dotted-loader"></div>
     );
   }
+
+
 
   // console.log(data)
   return (
     <div className="p-3">
       <div className="col-12">
+        <select className="select-c" onChange={handleFilter}>
+          <option>All</option>
+          <option>Placed</option>
+          <option>Processing</option>
+          <option>Delivered</option>
+        </select>
         <table className="table table-bordered table-responsive-lg">
           <thead>
             <tr>
@@ -89,7 +121,7 @@ export default function OrderManagement() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {orderMaster.map((item) => (
               <tr key={item.id}>
                 <td>
                   {format(item.orderPlacedDate, "yyyy MMMM do , h:mm:ss a")}

@@ -1,10 +1,11 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 // import { getAllMeals } from "../httpServices/mealService";
 import MealIteam from "./MealIteam";
 import useHttp from "../hooks/useHttp";
 import { getAuthToken } from "../utils/auth";
 import Error from "./UIs/Error";
 import CartContext from "../store/CartContext";
+import Input from "./UIs/Input";
 
 
 const requestConfig = {
@@ -16,7 +17,7 @@ const requestConfig = {
 
 export default function Meals({customer}) {
 
-  // const [cart, setCart] = useState([]);
+  const [mealMaster, setMealMaster] = useState([]);
   const cartCtx = useContext(CartContext);
 
 
@@ -37,6 +38,7 @@ export default function Meals({customer}) {
             "Authorization": "Bearer " + getAuthToken(),
           },
         } );
+        setMealMaster(loadedMeals);
         const resCartData = await cartResponse.json();
         // console.log(cartResponse)
         if(loadedMeals.length > 0 && resCartData.length > 0) { 
@@ -52,61 +54,44 @@ export default function Meals({customer}) {
           } catch(e) {
             cartCtx.setInitialCart([]);
           }
-         
         }
       }
-  
     }
     getCartData();
   }, [customer, loadedMeals]);
 
-
-
-  // useEffect(() => {
-  //   console.log('mmmm')
-  //   if(loadedMeals.length > 0 && cart.length > 0) { 
-  //     let cartA = [];
-  //     cart.forEach((item) => {
-  //       let findItem = loadedMeals.find((meal) => meal.id === item.productId);
-  //       if(findItem) {
-  //       cartA.push({...findItem, quantity: item.quantity});
-  //       }
-  //     });
-  //     cartCtx.setInitialCart(cartA); 
-  //   }
-  // }, [])
-
-
-  // console.log('cart data', cart)
-
   if (isLoading) {
-    return <p className="center">Fetching meals...</p>;
+    return <div className="dotted-loader"></div>;
   }
 
   if(error) {
     return <Error title='Faild to fetch meals' message={error} ></Error>
   }
 
- 
 
-  // useEffect(() => {
-  //   async function getMealItems() {
-  //     let response = await getAllMeals();
-  //     if (response) {
-  //       setMealItems(response);
-  //     }
-  //   }
-  //   getMealItems();
-  // }, []);
+  function handleSearch(event) {
+    console.log(event.target.value)
+    let t = loadedMeals.filter((item) => String(item.productName).toLowerCase().includes(event.target.value.toLowerCase()));
+    setMealMaster(t);
+    console.log(t)
+    // console.log(mealMaster);
+  }
 
-  // const [mealItems, setMealItems] = useState([]);
-  // console.log("working2");
 
   return (
+    <div>
+      <div>
+        <Input classN='align-items' placeholder='Search by Food Name' onChange={handleSearch} />
+      </div>
+      {
+        mealMaster.length === 0 &&<div> <p>No Food Items Found!</p></div>
+      }
+      
     <ul id="meals">
-      {loadedMeals.map((item) => (
+      {mealMaster.map((item) => (
         <MealIteam key={item.id} meal={item} customer={customer} />
       ))}
     </ul>
+    </div>
   );
 }

@@ -27,3 +27,12 @@
     background-color: #737c79;;
   }
 }
+
+.select-c {
+  border: 1px solid grey;
+    border-radius: 10px;
+    width: 150px;
+    height: 40px;
+    /* margin: 5px; */
+    margin-bottom: 10px;
+}

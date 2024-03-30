@@ -5,8 +5,11 @@ import { Button } from "../components/UIs/Button";
 import CartContext from "../store/CartContext";
 import UserProgressContext from "../store/UserProgressContext";
 import { useContext } from "react";
+import emptyCart from "../assets/empty-cart.svg";
+import fullCart from "../assets/full-cart.svg";
 
-function EventsNavigation({hidden = false, userRoles = []}) {
+
+function EventsNavigation({ hidden = false, userRoles = [] }) {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
   const navigate = useNavigate();
@@ -21,11 +24,11 @@ function EventsNavigation({hidden = false, userRoles = []}) {
 
   function handleLogOut() {
     localStorage.clear();
-    navigate('/login', {replace: true})
+    navigate("/login", { replace: true });
   }
 
   return (
-    <ul className="n-bar"> 
+    <ul className="n-bar">
       <li className="company-name">
         <img className="image-svg" src={logo} alt="" />
         <span>CulinaryHub14</span>
@@ -37,9 +40,8 @@ function EventsNavigation({hidden = false, userRoles = []}) {
       </li>
       <li>
         <NavLink to="/orders" className="nav__link" end>
-
-        {(!userRoles.find((role) => role === 'ADMIN') &&  'My Orders') || 'Admin Dashboard'}
-         
+          {(!userRoles.find((role) => role === "ADMIN") && "My Orders") ||
+            "Admin Dashboard"}
         </NavLink>
       </li>
       {/* <li hidden={!userRoles.find((role) => role ==='ADMIN')}>
@@ -47,18 +49,24 @@ function EventsNavigation({hidden = false, userRoles = []}) {
           Admin Dashboard
         </NavLink>
       </li> */}
-      <li hidden={hidden}>
+      {/* <li hidden={hidden} className="float-right">
         <Button onClick={handleShowCart} className="margin-t-b" textOnly>
-          Cart ({totalCartItems})
+        <span><img src={emptyCart} /> ({totalCartItems})</span>
         </Button>
-      </li>
+      </li> */}
       <li className="log-out">
-      <Button onClick={handleLogOut} textOnly>
+        <div>
+        <Button hidden={hidden}  onClick={handleShowCart} className="" textOnly>
+          {totalCartItems > 0 ? <span><img src={fullCart} /> ({totalCartItems})</span> : <img src={emptyCart} /> }        
+        </Button>
+        <Button onClick={handleLogOut} textOnly>
           Logout
         </Button>
+        </div>
+    
       </li>
     </ul>
-    );
+  );
 }
 
 export default EventsNavigation;
