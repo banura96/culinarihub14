@@ -7,6 +7,7 @@ import Input from "./UIs/Input.jsx";
 export default function Login() {
   // const [enteredEmail, setEmail] = useState();
   const [proccessing, setProccessing] = useState();
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -30,16 +31,21 @@ export default function Login() {
         localStorage.setItem("token", resTokenData.token);
         // setTimeout(() => {
         //   console.log(localStorage.getItem('token'))
-          navigate(`/`);
+        navigate(`/`);
         // }, 5000)
       }
       // console.log(response);
-    } catch (e) {}
+    } catch (e) {
+      setError("Username or Password incorrect!");
+    }
     // console.log("submitted", loginForm);
     setProccessing(false);
   }
 
   function handleForm(input, event) {
+    if (error) {
+      setError("");
+    }
     setLoginForm((preVer) => ({
       ...preVer,
       [input]: event.target.value,
@@ -84,12 +90,27 @@ export default function Login() {
               />
             </div> */}
             <button className="btn mt-2" type="submit">
-              { proccessing && <i className="fa fa-spinner fa-spin"></i>} Submit
+              {proccessing && <i className="fa fa-spinner fa-spin"></i>} Submit
             </button>
+            {error && (
+              <p
+                style={{
+                  'background': '#fba0a0',
+                  "text-align": "center",
+                  'color': '#8b0a0a'
+                }}
+                className="mt-2"
+              >
+                {error}
+              </p>
+            )}
           </form>
           <p className="mt-2">
             Don't you have a account,{" "}
-            <span className="link-text" onClick={() => navigate(`/signup`)}>Register</span> here!
+            <span className="link-text" onClick={() => navigate(`/signup`)}>
+              Register
+            </span>{" "}
+            here!
           </p>
         </div>
       </div>

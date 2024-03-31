@@ -16,7 +16,6 @@ const requestConfig = {
 };
 
 export default function ProductManagement() {
-  const user = useLoaderData();
 
   const [show, setShow] = useState(false);
   const [selectedModal, setSelectedModal] = useState(null);
@@ -44,7 +43,7 @@ export default function ProductManagement() {
     setFile(URL.createObjectURL(e.target.files[0]));
   }
 
-  const { data, isLoading, error, sendRequest } = useHttp(
+  const { data, isLoading, sendRequest } = useHttp(
     `http://54.179.42.252:8080/api/v1/product`,
     requestConfig,
     []
@@ -54,7 +53,7 @@ export default function ProductManagement() {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
-      (file.size > 0  && cb(reader.result)) || cb(null);
+      (file.size > 0  && cb(reader.result)) || cb('');
     };
     reader.onerror = function (error) {
       console.log("Error: ", error);
@@ -65,10 +64,9 @@ export default function ProductManagement() {
     event.preventDefault();
     const formData = new FormData(event.target);
     const regFormData = Object.fromEntries(formData.entries());
-
     let submitionForm = { ...regFormData };
+    submitionForm.id = Number(submitionForm.id)
     await getBase64(submitionForm.imageBase64String, async (result) => {
-      console.log(result);
       submitionForm.imageBase64String = result;
 
       setProccesseing(true);

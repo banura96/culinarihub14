@@ -82,10 +82,9 @@ export default function OrderManagement() {
       if(item.orderStatus === String(status).toUpperCase()) {
         return true
       }
-      
+      return item;
     });
     setOrderMaster(fillteredData);
-    console.log(event.target.value)
   }
 
   if (isLoading) {
@@ -117,7 +116,7 @@ export default function OrderManagement() {
               <td>Order Status</td>
               <td>Total (LKR)</td>
               <td>Details</td>
-              {adminUser && <td>Activity</td>}
+              {adminUser && <td style={{'min-width': '235px'}}>Activity</td>}
             </tr>
           </thead>
           <tbody>
