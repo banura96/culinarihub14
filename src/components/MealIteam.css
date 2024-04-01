@@ -17,6 +17,7 @@
     text-align: center;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
     color: white;
+    position: relative;
   }
   
   .meal-item article {
@@ -56,3 +57,9 @@
   .meal-item-actions {
     margin-bottom: 1.5rem;
   }
+
+  .bott {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}

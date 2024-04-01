@@ -106,7 +106,11 @@ export default function MealIteam({ meal, customer }) {
           </p>
           <p className="meal-item-description">{meal.description}</p>
         </div>
-        <p className="meal-item-actions">
+      </article>
+      {/* <p className="meal-item-actions"> */}
+      <div style={{height: '50px'}}>
+      </div>
+      <div className="mb-2 bott">
           {meal.availableQuantity > 0 ? (
             <Button disabled={proccessing} onClick={handelAddMealToCart}>
               {proccessing && <i className="fa fa-spinner fa-spin"></i>} Add to
@@ -115,8 +119,8 @@ export default function MealIteam({ meal, customer }) {
           ) : (
             <Button disabled>Out of Stock</Button>
           )}
-        </p>
-      </article>
+          </div>
+        {/* </p> */}
     </li>
   );
 }

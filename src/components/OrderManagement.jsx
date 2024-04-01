@@ -82,7 +82,6 @@ export default function OrderManagement() {
       if(item.orderStatus === String(status).toUpperCase()) {
         return true
       }
-      return item;
     });
     setOrderMaster(fillteredData);
   }
