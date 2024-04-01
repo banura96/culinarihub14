@@ -62,6 +62,8 @@ export function Cart({ customer }) {
             name={item.productName}
             price={item.sellingPrice}
             quenty={item.quantity}
+            customerId={customer.id}
+            prodId={item.id}
             onDescresed={() => cartCtx.removeItem(item.id)}
             onIncresed={() => cartCtx.addItem(item)}
           ></CartItem>
