@@ -121,7 +121,7 @@ export default function OrderManagement() {
               <td>Order Status</td>
               <td>Total (LKR)</td>
               <td>Details</td>
-              {adminUser && <td style={{'min-width': '235px'}}>Activity</td>}
+              {(adminUser || employeeUser)  && <td style={{'min-width': '235px'}}>Activity</td>}
             </tr>
           </thead>
           <tbody>
@@ -140,7 +140,7 @@ export default function OrderManagement() {
                     Details
                   </Button>
                 </td>
-                {adminUser && (
+                {(adminUser || employeeUser) && (
                   <td>
                     {item.orderStatus === "PLACED" ? (
                       <Button
