@@ -54,12 +54,12 @@ export default function Login() {
   return (
     <>
       <div className="login-page">
-        <p className="brand-name">
+        <div className="login-form">
+        <p className="brand-name text-center">
           <h3>CulinaryHub14</h3>
 
           <p>Foodie adventures are the best adventures.</p>
         </p>
-        <div className="login-form">
           <div className="text-center">
             <h3>Sign In</h3>
             <p>Welcome back, lets taste a food!</p>
