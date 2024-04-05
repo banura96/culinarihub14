@@ -70,10 +70,8 @@ export default function Meals({customer}) {
 
 
   function handleSearch(event) {
-    console.log(event.target.value)
     let t = loadedMeals.filter((item) => String(item.productName).toLowerCase().includes(event.target.value.toLowerCase()));
     setMealMaster(t);
-    console.log(t)
     // console.log(mealMaster);
   }
 

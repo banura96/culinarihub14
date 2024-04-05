@@ -7,6 +7,7 @@ import { Button } from "./Button";
 import { getAuthToken } from "../../utils/auth";
 import useHttp from "../../hooks/useHttp";
 import Error from "./Error";
+import { currencyFormater } from "../../utils/numberFormatting";
 
 const requestConfig = {
   method: "POST",
@@ -16,7 +17,7 @@ const requestConfig = {
   },
 };
 
-export default function Checkout({customer}) {
+export default function Checkout({ customer }) {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
 
@@ -25,7 +26,7 @@ export default function Checkout({customer}) {
     isLoading: isSending,
     error,
     sendRequest,
-    clearData
+    clearData,
   } = useHttp(
     `http://54.179.42.252:8080/api/v1/order/checkout/${customer?.id}`,
     requestConfig
@@ -63,7 +64,17 @@ export default function Checkout({customer}) {
   );
 
   if (isSending) {
-    actions = <span>Sending order data...</span>;
+    actions = (
+      <>
+        <Button disabled textOnly type="button" onClick={handleClose}>
+          Close
+        </Button>
+        <Button disabled>
+          <i className="fa fa-spinner fa-spin"></i>
+          Submit Order
+        </Button>
+      </>
+    );
   }
 
   if (data && !error) {
@@ -79,7 +90,9 @@ export default function Checkout({customer}) {
           few minutes.
         </p>
         <p className="modal-actions">
-          <Button onClick={handleFinish} type="button">Ok</Button>
+          <Button onClick={handleFinish} type="button">
+            Ok
+          </Button>
         </p>
       </Modal>
     );
@@ -89,11 +102,29 @@ export default function Checkout({customer}) {
     <Modal open={userProgressCtx.progress === "chekout"} onClose={handleClose}>
       <form onSubmit={handleSubmit}>
         <h2>Checkout</h2>
-        <p>Total Amount: LKR {cartTotal}</p>
-        <Input label="Full Name" type="text" id="full-name" defaultValue={customer?.fullName} name='fullName' />
-        <Input label="E-Mail Address" type="email" id="email" defaultValue={customer?.email} name='email' />
-        <Input label="Address" type="text" id="address" defaultValue={customer?.address} name='address' />
-{/* 
+        <p>Total Amount: LKR {currencyFormater.format(cartTotal)}</p>
+        <Input
+          label="Full Name"
+          type="text"
+          id="full-name"
+          defaultValue={customer?.fullName}
+          name="fullName"
+        />
+        <Input
+          label="E-Mail Address"
+          type="email"
+          id="email"
+          defaultValue={customer?.email}
+          name="email"
+        />
+        <Input
+          label="Address"
+          type="text"
+          id="address"
+          defaultValue={customer?.address}
+          name="address"
+        />
+        {/* 
         <div className="control-row">
           <Input label="Postal Code" type="text" id="postal-code" />
           <Input label="City" type="text" id="city" />

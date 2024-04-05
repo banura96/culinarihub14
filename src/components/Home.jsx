@@ -6,41 +6,40 @@ import Meals from "./Meals";
 import { Cart } from "../components/Cart";
 import Checkout from "./UIs/Checkout";
 import { getAuthToken } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [customer, setCustomer] = useState(null);
   // const [userRole, setUserRole] = useState([]);
  
 
   useEffect(() => {
     async function getCustomerData() {
-      const customerData = await fetch(
-        "http://54.179.42.252:8080/api/v1/customer/me",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + getAuthToken(),
-          },
+      try {
+        const customerData = await fetch(
+          "http://54.179.42.252:8080/api/v1/customer/me",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + getAuthToken(),
+            },
+          }
+        );
+        const resCustomerData = await customerData.json();
+  
+        if (customerData.ok) {
+          setCustomer(resCustomerData);
+        } else {
+          throw new Error(resCustomerData.message)
         }
-      );
-      const resCustomerData = await customerData.json();
-
-      if (customerData.ok) {
-        setCustomer(resCustomerData);
+      } catch(e) {
+        if(e.message === 'Unauthorized') {
+          localStorage.clear();
+          navigate("/login", { replace: true })
+        }
       }
-      // const userData = await fetch(
-      //   `http://54.179.42.252:8080/api/v1/user/${resCustomerData.id}`,
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: "Bearer " + getAuthToken(),
-      //     },
-      //   }
-      // );
-      // const resUserData = await userData.json();
-      // if (userData.ok) {
-      //   setUserRole([...resUserData.userRole]);
-      // }
+    
     }
     getCustomerData();
   }, []);

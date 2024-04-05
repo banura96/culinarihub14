@@ -11,15 +11,6 @@ export function Cart({ customer }) {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
   const [processing, setProcessing] = useState(false);
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  const handleShow = (id) => {
-    setShow(true);
-  };
 
   // console.log(cartCtx)
 
@@ -71,6 +62,8 @@ export function Cart({ customer }) {
             name={item.productName}
             price={item.sellingPrice}
             quenty={item.quantity}
+            customerId={customer.id}
+            prodId={item.id}
             onDescresed={() => cartCtx.removeItem(item.id)}
             onIncresed={() => cartCtx.addItem(item)}
           ></CartItem>
@@ -85,9 +78,11 @@ export function Cart({ customer }) {
         >
           Close
         </Button>
-        <Button onClick={handleClearCart}>
-          {processing && <i className="fa fa-spinner fa-spin"></i>}Clear Cart
-        </Button>
+        {cartCtx.items.length > 0 && (
+           <Button onClick={handleClearCart}>
+           {processing && <i className="fa fa-spinner fa-spin"></i>}Clear Cart
+         </Button>
+        )}
         {cartCtx.items.length > 0 && (
           <Button
             onClick={handleCheckout}

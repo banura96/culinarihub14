@@ -18,6 +18,7 @@ const requestConfig = {
 export default function OrderManagement() {
   const loggedUser = useLoaderData();
   const adminUser = loggedUser.user.userRole.find((role) => role === "ADMIN");
+  const employeeUser = loggedUser.user.userRole.find((role) => role === "EMPLOYEE");
 
   const [show, setShow] = useState(false);
   const [selectedModal, setSelectedModal] = useState(null);
@@ -27,19 +28,24 @@ export default function OrderManagement() {
 
   const { data, isLoading } = useHttp(
     `http://54.179.42.252:8080/api/v1/order/customer-orders?${
-      !adminUser ? "customerId=" + loggedUser.customer.id : ""
+      (!adminUser && !employeeUser) ? "customerId=" + loggedUser.customer.id : ""
     }&orderStatus=`,
     requestConfig,
     []
   );
 
   useEffect(() => {
-    // const fillter = data.filter((item) => {
-    //   if(item.orderStatus === String('Processing').toUpperCase()) {
-    //     return true
-    //   }
-    // });
-    setOrderMaster(data);
+    if(employeeUser) {
+      const filter = data.filter((item) => {
+        if(item.orderStatus === String('Processing').toUpperCase()) {
+          return true
+        }
+      });
+      setOrderMaster(filter);
+    } else {
+      setOrderMaster(data);
+    }
+ 
   }, [data])
 
   async function changeOrderStatus(status, item, id) {
@@ -82,10 +88,8 @@ export default function OrderManagement() {
       if(item.orderStatus === String(status).toUpperCase()) {
         return true
       }
-      
     });
     setOrderMaster(fillteredData);
-    console.log(event.target.value)
   }
 
   if (isLoading) {
@@ -100,7 +104,7 @@ export default function OrderManagement() {
   return (
     <div className="p-3">
       <div className="col-12">
-        <select className="select-c" onChange={handleFilter}>
+        <select className="select-c" hidden={employeeUser} onChange={handleFilter}>
           <option>All</option>
           <option>Placed</option>
           <option>Processing</option>
@@ -111,13 +115,13 @@ export default function OrderManagement() {
             <tr>
               <td>Order Date</td>
               <td>Delivery Address</td>
-              {adminUser &&  <td>Customer Code</td>}
-              {adminUser &&  <td>Customer Name</td>}
+              {(adminUser || employeeUser) &&  <td>Customer Code</td>}
+              {(adminUser || employeeUser) &&  <td>Customer Name</td>}
 
               <td>Order Status</td>
               <td>Total (LKR)</td>
               <td>Details</td>
-              {adminUser && <td>Activity</td>}
+              {(adminUser || employeeUser)  && <td style={{'min-width': '235px'}}>Activity</td>}
             </tr>
           </thead>
           <tbody>
@@ -127,8 +131,8 @@ export default function OrderManagement() {
                   {format(item.orderPlacedDate, "yyyy MMMM do , h:mm:ss a")}
                 </td>
                 <td>{item.deliveryAddress || "N/A"}</td>
-                {adminUser && <td>{item.customerId}</td>}
-                {adminUser && <td>{item.customerName}</td>}
+                {(adminUser || employeeUser) && <td>{item.customerId}</td>}
+                {(adminUser || employeeUser) && <td>{item.customerName}</td>}
                 <td>{item.orderStatus}</td>
                 <td>{currencyFormater.format(item.orderTotal)}</td>
                 <td>
@@ -136,7 +140,7 @@ export default function OrderManagement() {
                     Details
                   </Button>
                 </td>
-                {adminUser && (
+                {(adminUser || employeeUser) && (
                   <td>
                     {item.orderStatus === "PLACED" ? (
                       <Button
@@ -203,6 +207,7 @@ export default function OrderManagement() {
             ))}
           </tbody>
         </table>
+        {orderMaster.length === 0 ? 'You dont have any orders yet!' : ''}
       </div>
     </div>
   );

@@ -32,7 +32,9 @@ export default function MealIteam({ meal, customer }) {
         quantity: 1,
         price: meal.sellingPrice,
       });
-      cartCtx.addItem({ ...meal, cartId: newCart.id }, customer.id);
+      if(newCart) {
+        cartCtx.addItem({ ...meal, cartId: newCart.id }, customer.id);
+      }
     }
     setProccesseing(false);
   }
@@ -50,7 +52,8 @@ export default function MealIteam({ meal, customer }) {
     if (!res.ok) {
       handleShow(resData.message || "Something went wrong");
       setProccesseing(false);
-      throw new Error(res.message || "Something went wrong");
+      return null;
+      // throw new Error(res.message || "Something went wrong");
     }
     return resData;
   }
@@ -71,6 +74,7 @@ export default function MealIteam({ meal, customer }) {
     if (!response.ok) {
       handleShow(resData.message || "Something went wrong");
       setProccesseing(false);
+      return;
       // throw new Error(response.message || "Something went wrong");
     }
     cartCtx.addItem(meal, customer.id);
@@ -102,7 +106,11 @@ export default function MealIteam({ meal, customer }) {
           </p>
           <p className="meal-item-description">{meal.description}</p>
         </div>
-        <p className="meal-item-actions">
+      </article>
+      {/* <p className="meal-item-actions"> */}
+      <div style={{height: '50px'}}>
+      </div>
+      <div className="mb-2 bott">
           {meal.availableQuantity > 0 ? (
             <Button disabled={proccessing} onClick={handelAddMealToCart}>
               {proccessing && <i className="fa fa-spinner fa-spin"></i>} Add to
@@ -111,8 +119,8 @@ export default function MealIteam({ meal, customer }) {
           ) : (
             <Button disabled>Out of Stock</Button>
           )}
-        </p>
-      </article>
+          </div>
+        {/* </p> */}
     </li>
   );
 }
